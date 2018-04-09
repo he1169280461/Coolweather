@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.app.ProgressDialog;
 import com.example.hechang.coolweather.db.City;
 import com.example.hechang.coolweather.db.County;
+
 import com.example.hechang.coolweather.db.Province;
 import com.example.hechang.coolweather.util.HttpUtil;
 import com.example.hechang.coolweather.util.Utility;
@@ -60,7 +61,7 @@ public class ChooseAreaFragment extends Fragment{
     private int currentLevel;
 
 
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.choose_area,container,false);
@@ -125,7 +126,7 @@ public class ChooseAreaFragment extends Fragment{
     private void queryCities(){
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
-        cityList=DataSupport.where("province=?",String.valueOf(selectedProvince.getId())).find(City.class);
+        cityList=DataSupport.where("provinceid=?",String.valueOf(selectedProvince.getId())).find(City.class);
         if(cityList.size()>0){
             dataList.clear();
             for(City city:cityList){
@@ -136,7 +137,7 @@ public class ChooseAreaFragment extends Fragment{
             currentLevel=LEVEL_CITY;
         }else{
             int provinceCode=selectedProvince.getProvinceCode();
-            String address="http://guolin.tech/api/china"+provinceCode;
+            String address="http://guolin.tech/api/china/"+provinceCode;
             queryFromServer(address,"city");
 
         }
@@ -147,7 +148,7 @@ public class ChooseAreaFragment extends Fragment{
     private void queryCounties(){
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countyList=DataSupport.where("city=?",String.valueOf(selectedCity.getId())).find(County.class);
+        countyList=DataSupport.where("cityid=?",String.valueOf(selectedCity.getId())).find(County.class);
         if(countyList.size()>0){
             dataList.clear();
             for(County county:countyList){
@@ -174,7 +175,7 @@ public class ChooseAreaFragment extends Fragment{
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //clossProgressDialog();
+                        closeProgressDialog();
                         Toast.makeText(getContext(),"加载失败",Toast.LENGTH_SHORT).show();
                     }
                 });
