@@ -1,14 +1,21 @@
 package com.example.hechang.coolweather.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.example.hechang.coolweather.WeatherActivity;
 import com.example.hechang.coolweather.db.City;
 import com.example.hechang.coolweather.db.County;
 import com.example.hechang.coolweather.db.Province;
+import com.example.hechang.coolweather.gson.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by HE on 2018/4/8.
@@ -82,4 +89,18 @@ public class Utility {
         }
         return false;
     }
+    public static Weather handleWeatherResponse(String response) {
+        try {
+
+            Log.d(TAG, "handleWeatherResponse: " + response);
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
